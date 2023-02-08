@@ -1,4 +1,4 @@
-export { fetchCountries };
+// export { fetchCountries };
 
 function fetchCountries(name) {
   if (inputCountries.value === '') {
