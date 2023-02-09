@@ -16,12 +16,11 @@ inputCountries.addEventListener('input', debounce(fetchCountries, 300));
 // а розмітка списку країн або інформації про країну зникає.
 
 function fetchCountries(name) {
-  console.log(inputCountries.value);
+  console.log(inputCountries.value.trim());
   // прибрати цю ф-цію і заімпортити з файлу-----fetchCountries.js----------------------------------------
   if (inputCountries.value.trim() === '') {
     return;
-  }
-  countryName = name.target.value.trim();
+  } else countryName = inputCountries.value.trim();
 
   return fetch(
     `https://restcountries.com/v3.1/name/${countryName}?fields=,name,capital,population,flags,languages`
@@ -29,11 +28,11 @@ function fetchCountries(name) {
     .then(response => {
       return response.json();
     })
-    .then(
-      country =>
-        countryInfo.insertAdjacentHTML('afterbegin', makingCountryList(country))
-      // countryInfo.insertAdjacentHTML('afterbegin', makingSingleCountry(country))
-    ); //сюда прикрутить функцию для рендера на страницу
+    .then(country => {
+      if (country.length === 1) {
+        makingSingleCountry(country);
+      } else makingCountriesList(country);
+    });
 }
 
 // Якщо у відповіді бекенд повернув більше ніж 10 країн, в інтерфейсі з'являється
@@ -42,8 +41,6 @@ function fetchCountries(name) {
 
 // Якщо бекенд повернув від 2-х до 10-и країн, під тестовим полем відображається список знайдених країн.
 // Кожен елемент списку складається з прапора та назви країни.
-
-console.log(fetchCountries());
 
 // Якщо результат запиту - це масив з однією країною, в інтерфейсі відображається розмітка
 // картки з даними про країну: прапор, назва, столиця, населення і мови.
@@ -60,27 +57,25 @@ function makingSingleCountry(country) {
       )}</li></ul>`;
     }
   );
-  console.log(markupCountryCard);
+
+  joinHtml = markupCountryCard.join('');
+  countryInfo.insertAdjacentHTML('beforebegin', joinHtml);
+  // console.log(arrayCountryInfo);
 }
 
-function makingCountryList(country) {
+function makingCountriesList(country) {
   const markupCountryList = country.map(({ flags, name }) => {
     return `<li class = "country-item">${name.common}</li>`;
   });
-  console.log(markupCountryList);
+
+  joinHtml = markupCountryList.join('');
+  countryList.insertAdjacentHTML('afterbegin', joinHtml);
 }
 
 // Якщо користувач ввів назву країни, якої не існує, бекенд поверне не порожній масив,
 // а помилку зі статус кодом 404 - не знайдено. Якщо це не обробити, то користувач
 // ніколи не дізнається про те, що пошук не дав результатів. Додай повідомлення
 // "Oops, there is no country with that name" у разі помилки, використовуючи бібліотеку notiflix.
+
 // Не забувай про те, що fetch не вважає 404 помилкою, тому необхідно явно відхилити
 // проміс, щоб можна було зловити і обробити помилку.
-
-// function makingCountriesList(countriesList) {
-//   const markupCountryCard = countries.map;
-//   console.log(markupCountryCard);
-// }
-// makingCountriesList('peru');
-
-function renderCountryToHtml(countries) {}

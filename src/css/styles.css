@@ -18,3 +18,21 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+
+.country-div {
+  display: flex;
+  justify-content: start;
+  gap: 20px;
+
+  align-items: center;
+}
+img {
+  width: 40px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+span {
+  font-weight: bold;
+}
