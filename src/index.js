@@ -8,7 +8,6 @@ const inputCountries = document.querySelector('#search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
-// console.log(inputCountries);
 //  1:01 інтерфейс в окремій функції
 
 inputCountries.addEventListener('input', debounce(fetchCountries, 300));
@@ -19,7 +18,7 @@ function fetchCountries(name) {
   console.log(inputCountries.value.trim());
   // прибрати цю ф-цію і заімпортити з файлу-----fetchCountries.js----------------------------------------
   if (inputCountries.value.trim() === '') {
-    return;
+    countryInfo.innerHTML = '';
   } else countryName = inputCountries.value.trim();
 
   return fetch(
@@ -42,9 +41,6 @@ function fetchCountries(name) {
 // Якщо бекенд повернув від 2-х до 10-и країн, під тестовим полем відображається список знайдених країн.
 // Кожен елемент списку складається з прапора та назви країни.
 
-// Якщо результат запиту - це масив з однією країною, в інтерфейсі відображається розмітка
-// картки з даними про країну: прапор, назва, столиця, населення і мови.
-
 function makingSingleCountry(country) {
   const markupCountryCard = country.map(
     ({ flags, name, capital, population, languages }) => {
@@ -54,12 +50,12 @@ function makingSingleCountry(country) {
         name.common
       }</h2></div><ul><li class="country-property"><span>Capital:</span> ${capital}</li><li class="country-property"><span>Population:</span> ${population}</li><li class="country-property"> <span>Languages:</span> ${Object.values(
         languages
-      )}</li></ul>`;
+      )}</li></ul></div>`;
     }
   );
-
+  countryList.innerHTML = '';
   joinHtml = markupCountryCard.join('');
-  countryInfo.insertAdjacentHTML('beforebegin', joinHtml);
+  countryInfo.insertAdjacentHTML('afterbegin', joinHtml);
   // console.log(arrayCountryInfo);
 }
 
@@ -67,6 +63,7 @@ function makingCountriesList(country) {
   const markupCountryList = country.map(({ flags, name }) => {
     return `<li class = "country-item">${name.common}</li>`;
   });
+  countryInfo.innerHTML = '';
 
   joinHtml = markupCountryList.join('');
   countryList.insertAdjacentHTML('afterbegin', joinHtml);

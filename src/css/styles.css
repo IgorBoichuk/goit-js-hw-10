@@ -26,13 +26,16 @@ body {
 
   align-items: center;
 }
+
 img {
   width: 40px;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 span {
   font-weight: bold;
 }
